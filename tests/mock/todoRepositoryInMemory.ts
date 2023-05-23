@@ -10,6 +10,10 @@ export class TodoRepositoryInMemory implements ITodoRepository{
         this.todos.push({id:1, task:todo.task, done:todo.done,createAt:todo.createAt,completeAt:0})
         return
     }
+    async find({id}:Pick<Todo, 'id'>):Promise<Todo|null>{
+        const todo = this.todos[id-1]
+        return !todo?null:todo;
+    }
     list(): Promise<Todo[]> {
         throw new Error("Method not implemented.");
     }
