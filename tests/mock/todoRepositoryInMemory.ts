@@ -1,5 +1,6 @@
 import { ITodoRepository } from '../../src/core/todo/model/ItodoRepository';
 import { Todo } from '../../src/core/todo/model/todo';
+import { DateFormart } from '../../src/core/util/dateFormat';
 
 export class TodoRepositoryInMemory implements ITodoRepository {
 	todos: Todo[];
@@ -12,7 +13,7 @@ export class TodoRepositoryInMemory implements ITodoRepository {
 			task: todo.task,
 			done: todo.done,
 			createAt: todo.createAt,
-			completeAt: 0,
+			completeAt: new DateFormart().format(new Date()),
 		});
 		return;
 	}

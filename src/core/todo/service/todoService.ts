@@ -1,15 +1,19 @@
+import { IDateFormat } from '../../util/model/iDateFormat';
 import { ITodoService } from '../model/ITodoService';
 import { ITodoRepository } from '../model/ItodoRepository';
 import { Todo } from '../model/todo';
 
 export class TodoService implements ITodoService {
 	#repository: ITodoRepository;
-	constructor(repository: ITodoRepository) {
+	#dateFormat: IDateFormat;
+	constructor(repository: ITodoRepository, dateFormat: IDateFormat) {
 		this.#repository = repository;
+		this.#dateFormat = dateFormat;
 	}
 
 	async save({ task }: Pick<Todo, 'task'>): Promise<void> {
-		await this.#repository.save({ task, done: false, createAt: Date.now() });
+		const formatDate = this.#dateFormat.format(new Date());
+		await this.#repository.save({ task, done: false, createAt: formatDate });
 		return;
 	}
 
@@ -22,6 +26,7 @@ export class TodoService implements ITodoService {
 	}
 
 	async complete({ id }: Pick<Todo, 'id'>): Promise<Todo | null> {
+		const formatDate = this.#dateFormat.format(new Date());
 		const todo = await this.find({ id });
 		if (!todo) {
 			return null;
@@ -30,7 +35,7 @@ export class TodoService implements ITodoService {
 			id,
 			task: todo.task,
 			done: !todo.done,
-			completeAt: Date.now(),
+			completeAt: formatDate,
 		});
 		return todo;
 	}

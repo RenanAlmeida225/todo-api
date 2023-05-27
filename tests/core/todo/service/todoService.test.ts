@@ -1,24 +1,21 @@
-import { it, expect, describe, beforeAll, vi, afterAll } from 'vitest';
+import { it, expect, describe, beforeEach, vi } from 'vitest';
 import { TodoService } from '../../../../src/core/todo/service/todoService';
 import { TodoRepositoryInMemory } from '../../../mock/todoRepositoryInMemory';
+import { DateFormartMock } from '../../../mock/DateFormartMock.test';
 
 const makeSut = () => {
 	const repository = new TodoRepositoryInMemory();
-	const sut = new TodoService(repository);
+	const sut = new TodoService(repository, new DateFormartMock());
 	return { sut, repository };
 };
 
 describe('TodoService', () => {
-	beforeAll(() => {
+	const date = new Date(2000, 1, 1, 13);
+	const formatDate = new DateFormartMock().format(date);
+	beforeEach(() => {
 		vi.useFakeTimers();
-		const date = new Date(2000, 1, 1, 13);
 		vi.setSystemTime(date);
 	});
-
-	afterAll(() => {
-		vi.useRealTimers();
-	});
-
 	describe('save', () => {
 		it('should return void', async () => {
 			const { sut, repository } = makeSut();
@@ -29,8 +26,8 @@ describe('TodoService', () => {
 					id: 1,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 			]);
 		});
@@ -43,22 +40,22 @@ describe('TodoService', () => {
 					id: 1,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 2,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 3,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 			];
 			const { sut, repository } = makeSut();
@@ -66,6 +63,7 @@ describe('TodoService', () => {
 			const promise = await sut.find({ id: 1 });
 			expect(promise).toEqual(todos[0]);
 		});
+
 		it('should return null', async () => {
 			const { sut } = makeSut();
 			const promise = await sut.find({ id: 1 });
@@ -85,22 +83,22 @@ describe('TodoService', () => {
 					id: 1,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 2,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 3,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 			];
 			const { sut, repository } = makeSut();
@@ -122,22 +120,22 @@ describe('TodoService', () => {
 					id: 1,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 2,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 3,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 			];
 			const { sut, repository } = makeSut();
@@ -159,22 +157,22 @@ describe('TodoService', () => {
 					id: 1,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 2,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 				{
 					id: 3,
 					task: 'any_task',
 					done: false,
-					createAt: Date.now(),
-					completeAt: 0,
+					createAt: formatDate,
+					completeAt: formatDate,
 				},
 			];
 			const { sut, repository } = makeSut();
