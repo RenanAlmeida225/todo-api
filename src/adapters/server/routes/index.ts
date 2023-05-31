@@ -3,10 +3,8 @@ import { TodoController } from '../controller/todoController';
 import { todoServiceFactory } from '../../factory/todoServiceFactory';
 
 const route = Router();
+const todoController = new TodoController(todoServiceFactory());
 
-const todoService = todoServiceFactory();
-const todoController = new TodoController(todoService);
-
-route.post('/save', todoController.save);
+route.post('/save', (req, res) => todoController.save(req, res));
 
 export default route;

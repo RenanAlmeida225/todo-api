@@ -2,9 +2,12 @@ import { Request, Response } from 'express';
 import { ITodoService } from '../../../core/todo/model/ITodoService';
 
 export class TodoController {
-	#service: ITodoService;
+	#service!: ITodoService;
 	constructor(service: ITodoService) {
 		this.#service = service;
+	}
+	get service(): ITodoService {
+		return this.#service;
 	}
 	async save(
 		req: Request,
@@ -15,10 +18,11 @@ export class TodoController {
 			if (!task) {
 				return res.status(422).json({ error: 'missing param' });
 			}
-			await this.#service.save({ task });
+			await this.service.save({ task });
 			return res.status(201).json();
-		} catch (error) {
-			return res.status(500).json({ error });
+		} catch (error: any) {
+			console.log(error);
+			return res.status(500).json({ error: 'server error' });
 		}
 	}
 }
