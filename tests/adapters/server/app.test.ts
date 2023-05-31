@@ -14,7 +14,6 @@ describe('Routes', () => {
 	const formatDate = new DateFormartMock().format(date);
 	beforeEach(() => {
 		vi.useFakeTimers();
-		const date = new Date(2000, 1, 1, 13);
 		vi.setSystemTime(date);
 	});
 	afterEach(async () => {
