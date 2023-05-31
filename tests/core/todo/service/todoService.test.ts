@@ -1,7 +1,7 @@
 import { it, expect, describe, beforeEach, vi } from 'vitest';
 import { TodoService } from '../../../../src/core/todo/service/todoService';
 import { TodoRepositoryInMemory } from '../../../mock/todoRepositoryInMemory';
-import { DateFormartMock } from '../../../mock/DateFormartMock.test';
+import { DateFormartMock } from '../../../mock/DateFormartMock';
 
 const makeSut = () => {
 	const repository = new TodoRepositoryInMemory();

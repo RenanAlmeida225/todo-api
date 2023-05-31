@@ -1,6 +1,6 @@
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
 import { TodoRepositoryMysql } from '../../../src/adapters/data/todoRepository';
-import { DateFormartMock } from '../../mock/DateFormartMock.test';
+import { DateFormartMock } from '../../mock/DateFormartMock';
 
 const makeSut = () => {
 	const dateFormat = new DateFormartMock();
@@ -81,6 +81,53 @@ describe('TodoRepositoryMysql', () => {
 					completeAt: null,
 				},
 			]);
+		});
+	});
+
+	describe('update', () => {
+		it('should changed the task', async () => {
+			const todo = { task: 'any_task', done: false, createAt: formatDate };
+			const { sut } = makeSut();
+			await sut.save(todo);
+			const promise = await sut.update({
+				...todo,
+				id: 1,
+				completeAt: null,
+				task: 'update_task',
+			});
+			expect(promise).toBeUndefined();
+		});
+		it('should changed the done', async () => {
+			const todo = { task: 'any_task', done: false, createAt: formatDate };
+			const { sut } = makeSut();
+			await sut.save(todo);
+			const promise = await sut.update({
+				...todo,
+				id: 1,
+				completeAt: null,
+				done: true,
+			});
+			expect(promise).toBeUndefined();
+		});
+		it('should changed the completeAt', async () => {
+			const todo = { task: 'any_task', done: false, createAt: formatDate };
+			const { sut } = makeSut();
+			await sut.save(todo);
+			const promise = await sut.update({
+				...todo,
+				id: 1,
+				completeAt: formatDate,
+			});
+			expect(promise).toBeUndefined();
+		});
+	});
+
+	describe('delete', () => {
+		it('should delete task', async () => {
+			const { sut } = makeSut();
+			await sut.save({ task: 'any_task', done: false, createAt: formatDate });
+			const promise = await sut.delete({ id: 1 });
+			expect(promise).toBeUndefined();
 		});
 	});
 });

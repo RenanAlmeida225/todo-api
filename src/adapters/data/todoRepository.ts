@@ -66,15 +66,22 @@ export class TodoRepositoryMysql implements ITodoRepository {
 		return todos;
 	}
 
-	update({
+	async update({
 		id,
 		task,
 		done,
 		completeAt,
 	}: Omit<Todo, 'createAt'>): Promise<void> {
-		throw new Error('Method not implemented.');
+		const conn = await this.connection();
+		await conn.execute(
+			'UPDATE todos SET task = ?, done = ?, completeAt = ? WHERE id = ?;',
+			[task, done, completeAt, id],
+		);
+		return;
 	}
-	delete({ id }: Pick<Todo, 'id'>): Promise<void> {
-		throw new Error('Method not implemented.');
+	async delete({ id }: Pick<Todo, 'id'>): Promise<void> {
+		const conn = await this.connection();
+		await conn.execute('DELETE FROM todos WHERE id = ?;', [id]);
+		return;
 	}
 }
