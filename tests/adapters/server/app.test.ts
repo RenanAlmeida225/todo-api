@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../../src/adapters/server/app';
-import { it, expect, describe, afterEach } from 'vitest';
+import { it, expect, describe, afterEach, beforeEach, vi } from 'vitest';
 import { TodoRepositoryMysql } from '../../../src/adapters/data/todoRepository';
 import { DateFormartMock } from '../../mock/DateFormartMock';
 
@@ -12,6 +12,11 @@ function makeRepository() {
 describe('Routes', () => {
 	const date = new Date(2000, 1, 1, 13);
 	const formatDate = new DateFormartMock().format(date);
+	beforeEach(() => {
+		vi.useFakeTimers();
+		const date = new Date(2000, 1, 1, 13);
+		vi.setSystemTime(date);
+	});
 	afterEach(async () => {
 		const { sut } = makeRepository();
 		const conn = await sut.connection();
