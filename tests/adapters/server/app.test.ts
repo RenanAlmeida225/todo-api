@@ -9,6 +9,8 @@ function makeRepository() {
 	return { sut };
 }
 
+const baseUrl = '/api';
+
 describe('Routes', () => {
 	const date = new Date(2000, 1, 1, 13);
 	const formatDate = new DateFormartMock().format(date);
@@ -24,18 +26,37 @@ describe('Routes', () => {
 	describe('POST /save', () => {
 		it('should return status code 422', async () => {
 			const response = await request(app)
-				.post('/api/save')
+				.post(`${baseUrl}/save`)
 				.set('Accept', 'application/json');
 			expect(response.statusCode).toEqual(422);
 			expect(response.body).toEqual({ error: 'missing param' });
 		});
 		it('should return status code 201', async () => {
 			const response = await request(app)
-				.post('/api/save')
+				.post(`${baseUrl}/save`)
 				.send('task=any_task')
 				.set('Accept', 'application/json');
 			expect(response.statusCode).toEqual(201);
 			expect(response.body).toEqual('');
+		});
+	});
+	describe('GET /find/:id', () => {
+		it('should return status code 204 if not finded todo', async () => {
+			const response = await request(app)
+				.get(`${baseUrl}/find/1`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(204);
+			expect(response.body).toEqual({});
+		});
+		it('should return status code 204 if not finded todo', async () => {
+			const todo = { task: 'any_task', done: false, createAt: formatDate };
+			const { sut } = makeRepository();
+			await sut.save(todo);
+			const response = await request(app)
+				.get(`${baseUrl}/find/1`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(200);
+			expect(response.body).toEqual({ ...todo, id: 1, completeAt: null });
 		});
 	});
 });
