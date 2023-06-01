@@ -115,33 +115,17 @@ describe('TodoService', () => {
 			expect(promise).toBeNull();
 		});
 		it('should return an todo completed', async () => {
-			const todos = [
-				{
-					id: 1,
-					task: 'any_task',
-					done: false,
-					createAt: formatDate,
-					completeAt: formatDate,
-				},
-				{
-					id: 2,
-					task: 'any_task',
-					done: false,
-					createAt: formatDate,
-					completeAt: formatDate,
-				},
-				{
-					id: 3,
-					task: 'any_task',
-					done: false,
-					createAt: formatDate,
-					completeAt: formatDate,
-				},
-			];
+			const todo = {
+				id: 1,
+				task: 'any_task',
+				done: false,
+				createAt: formatDate,
+				completeAt: formatDate,
+			};
 			const { sut, repository } = makeSut();
-			repository.todos.push(...todos);
+			repository.todos.push(todo);
 			const promise = await sut.complete({ id: 1 });
-			expect(promise).toEqual(repository.todos[0]);
+			expect(promise).toEqual({ ...todo, done: true });
 		});
 	});
 
