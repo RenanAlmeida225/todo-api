@@ -24,13 +24,27 @@ export class TodoController {
 		}
 	}
 
-	async find(req: Request, res: Response) {
+	async find(
+		req: Request,
+		res: Response,
+	): Promise<Response<any, Record<string, any>>> {
 		try {
 			const { id } = req.params;
 			if (!id) return res.status(422).json({ error: 'missing param' });
 			const todo = await this.service.find({ id: Number(id) });
 			if (!todo) return res.status(204).json();
 			return res.status(200).json(todo);
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ error: 'server error' });
+		}
+	}
+
+	async list(res: Response): Promise<Response<any, Record<string, any>>> {
+		try {
+			const todos = await this.service.list();
+			if (todos.length == 0) return res.status(204).json();
+			return res.status(200).json(todos);
 		} catch (error) {
 			console.log(error);
 			return res.status(500).json({ error: 'server error' });
