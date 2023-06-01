@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, json } from 'express';
 import { ITodoService } from '../../../core/todo/model/ITodoService';
 
 export class TodoController {
@@ -15,12 +15,23 @@ export class TodoController {
 	): Promise<Response<any, Record<string, any>>> {
 		try {
 			const { task } = req.body;
-			if (!task) {
-				return res.status(422).json({ error: 'missing param' });
-			}
+			if (!task) return res.status(422).json({ error: 'missing param' });
 			await this.service.save({ task });
 			return res.status(201).json();
-		} catch (error: any) {
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ error: 'server error' });
+		}
+	}
+
+	async find(req: Request, res: Response) {
+		try {
+			const { id } = req.params;
+			if (!id) return res.status(422).json({ error: 'missing param' });
+			const todo = await this.service.find({ id: Number(id) });
+			if (!todo) return res.status(204).json();
+			return res.status(200).json(todo);
+		} catch (error) {
 			console.log(error);
 			return res.status(500).json({ error: 'server error' });
 		}
