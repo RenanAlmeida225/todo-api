@@ -59,4 +59,51 @@ describe('Routes', () => {
 			expect(response.body).toEqual({ ...todo, id: 1, completeAt: null });
 		});
 	});
+	describe('GET /list', () => {
+		it('should return status code 204 if not finded todo', async () => {
+			const response = await request(app)
+				.get(`${baseUrl}/list`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(204);
+			expect(response.body).toEqual({});
+		});
+		it('should return status code 204 if not finded todo', async () => {
+			const todos = [
+				{ task: 'any_task', done: false, createAt: formatDate },
+				{ task: 'any_task', done: false, createAt: formatDate },
+				{ task: 'any_task', done: false, createAt: formatDate },
+			];
+			const { sut } = makeRepository();
+			for (let i = 0; i < todos.length; i++) {
+				await sut.save(todos[i]);
+			}
+			const response = await request(app)
+				.get(`${baseUrl}/list`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(200);
+			expect(response.body).toEqual([
+				{
+					id: 1,
+					task: 'any_task',
+					done: false,
+					createAt: formatDate,
+					completeAt: null,
+				},
+				{
+					id: 2,
+					task: 'any_task',
+					done: false,
+					createAt: formatDate,
+					completeAt: null,
+				},
+				{
+					id: 3,
+					task: 'any_task',
+					done: false,
+					createAt: formatDate,
+					completeAt: null,
+				},
+			]);
+		});
+	});
 });
