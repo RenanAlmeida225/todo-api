@@ -131,4 +131,27 @@ describe('Routes', () => {
 			});
 		});
 	});
+	describe('DELETE /complete/:id', () => {
+		it('should return status code 204 if not finded todo', async () => {
+			const response = await request(app)
+				.delete(`${baseUrl}/delete/1`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(204);
+			expect(response.body).toEqual({});
+		});
+		it('should return status code 200 if delete todo', async () => {
+			const todo = { task: 'any_task', done: false, createAt: formatDate };
+			const { sut } = makeRepository();
+			await sut.save(todo);
+			const response = await request(app)
+				.delete(`${baseUrl}/delete/1`)
+				.set('Accept', 'application/json');
+			expect(response.statusCode).toEqual(200);
+			expect(response.body).toEqual({
+				...todo,
+				id: 1,
+				completeAt: null,
+			});
+		});
+	});
 });
