@@ -31,13 +31,14 @@ export class TodoService implements ITodoService {
 		if (!todo) {
 			return null;
 		}
+		const completed = !todo.done;
 		await this.#repository.update({
 			id,
 			task: todo.task,
-			done: !todo.done,
+			done: completed,
 			completeAt: formatDate,
 		});
-		return todo;
+		return { ...todo, done: completed, completeAt: formatDate };
 	}
 
 	async delete({ id }: Pick<Todo, 'id'>): Promise<Todo | null> {
