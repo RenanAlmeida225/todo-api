@@ -8,5 +8,6 @@ const todoController = new TodoController(todoServiceFactory());
 route.post('/save', (req, res) => todoController.save(req, res));
 route.get('/find/:id', (req, res) => todoController.find(req, res));
 route.get('/list', (_req, res) => todoController.list(res));
+route.put('/complete/:id', (req, res) => todoController.complete(req, res));
 
 export default route;
