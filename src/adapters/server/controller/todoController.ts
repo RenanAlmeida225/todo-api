@@ -1,4 +1,4 @@
-import { Request, Response, json } from 'express';
+import { Request, Response } from 'express';
 import { ITodoService } from '../../../core/todo/model/ITodoService';
 
 export class TodoController {
@@ -45,6 +45,21 @@ export class TodoController {
 			const todos = await this.service.list();
 			if (todos.length == 0) return res.status(204).json();
 			return res.status(200).json(todos);
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ error: 'server error' });
+		}
+	}
+
+	async complete(
+		req: Request,
+		res: Response,
+	): Promise<Response<any, Record<string, any>>> {
+		try {
+			const { id } = req.params;
+			const todo = await this.service.complete({ id: Number(id) });
+			if (!todo) return res.status(204).json();
+			return res.status(200).json(todo);
 		} catch (error) {
 			console.log(error);
 			return res.status(500).json({ error: 'server error' });
