@@ -65,4 +65,18 @@ export class TodoController {
 			return res.status(500).json({ error: 'server error' });
 		}
 	}
+	async delete(
+		req: Request,
+		res: Response,
+	): Promise<Response<any, Record<string, any>>> {
+		try {
+			const { id } = req.params;
+			const todo = await this.service.delete({ id: Number(id) });
+			if (!todo) return res.status(204).json();
+			return res.status(200).json(todo);
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ error: 'server error' });
+		}
+	}
 }
