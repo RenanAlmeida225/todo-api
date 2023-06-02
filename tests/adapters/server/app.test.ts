@@ -42,14 +42,14 @@ describe('Routes', () => {
 		});
 	});
 	describe('GET /find/:id', () => {
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 404 if not finded todo', async () => {
 			const response = await request(app)
 				.get(`${baseUrl}/find/1`)
 				.set('Accept', 'application/json');
-			expect(response.statusCode).toEqual(204);
-			expect(response.body).toEqual({});
+			expect(response.statusCode).toEqual(404);
+			expect(response.body).toEqual({ error: 'todo not found' });
 		});
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 404 if not finded todo', async () => {
 			const todo = { task: 'any_task', done: false, createAt: formatDate };
 			const { sut } = makeRepository();
 			await sut.save(todo);
@@ -61,14 +61,14 @@ describe('Routes', () => {
 		});
 	});
 	describe('GET /list', () => {
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 404 if not finded todo', async () => {
 			const response = await request(app)
 				.get(`${baseUrl}/list`)
 				.set('Accept', 'application/json');
-			expect(response.statusCode).toEqual(204);
-			expect(response.body).toEqual({});
+			expect(response.statusCode).toEqual(404);
+			expect(response.body).toEqual({ error: 'todos not found' });
 		});
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 200', async () => {
 			const todos = [
 				{ task: 'any_task', done: false, createAt: formatDate },
 				{ task: 'any_task', done: false, createAt: formatDate },
@@ -108,12 +108,12 @@ describe('Routes', () => {
 		});
 	});
 	describe('PUT /complete/:id', () => {
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 404 if not finded todo', async () => {
 			const response = await request(app)
 				.put(`${baseUrl}/complete/1`)
 				.set('Accept', 'application/json');
-			expect(response.statusCode).toEqual(204);
-			expect(response.body).toEqual({});
+			expect(response.statusCode).toEqual(404);
+			expect(response.body).toEqual({ error: 'todo not found' });
 		});
 		it('should return status code 200, done true, if done is false and date on complete', async () => {
 			const todo = { task: 'any_task', done: false, createAt: formatDate };
@@ -132,12 +132,12 @@ describe('Routes', () => {
 		});
 	});
 	describe('DELETE /complete/:id', () => {
-		it('should return status code 204 if not finded todo', async () => {
+		it('should return status code 404 if not finded todo', async () => {
 			const response = await request(app)
 				.delete(`${baseUrl}/delete/1`)
 				.set('Accept', 'application/json');
-			expect(response.statusCode).toEqual(204);
-			expect(response.body).toEqual({});
+			expect(response.statusCode).toEqual(404);
+			expect(response.body).toEqual({ error: 'todo not found' });
 		});
 		it('should return status code 200 if delete todo', async () => {
 			const todo = { task: 'any_task', done: false, createAt: formatDate };
