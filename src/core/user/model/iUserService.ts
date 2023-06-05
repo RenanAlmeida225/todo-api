@@ -5,7 +5,7 @@ export interface IUserService {
 		name,
 		email,
 		password,
-	}: Omit<User, 'id' | 'createAt'>): Promise<string>;
+	}: Omit<User, 'id' | 'createAt'>): Promise<string | null>;
 	login({
 		email,
 		password,
